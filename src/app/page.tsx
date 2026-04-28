@@ -33,6 +33,7 @@ export default function SpeakeasySystem() {
 
   const handleEnterSpeakingStage = () => {
     setSubmittedPoint('');
+    setPointForAIPrompt('');  // 清除这个
     setView('speakingStage');
   };
 

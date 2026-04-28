@@ -14,7 +14,7 @@ interface SpeakingStageViewProps {
 
 const SpeakingStageView: React.FC<SpeakingStageViewProps> = ({ setView, submittedPoint = '', pointForAIPrompt = '', studentName = 'Speaker', onSubmitDraft, onFinishSpeaking }) => {
   const [selectedPrompt, setSelectedPrompt] = useState<string>('');
-  const [viewpoint, setViewpoint] = useState<string>(submittedPoint);
+  const [viewpoint, setViewpoint] = useState<string>('');
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [isRecording, setIsRecording] = useState(false);
   const [recognition, setRecognition] = useState<SpeechRecognition | null>(null);
@@ -22,8 +22,7 @@ const SpeakingStageView: React.FC<SpeakingStageViewProps> = ({ setView, submitte
 
   useEffect(() => {
     setSelectedPrompt('');
-    setViewpoint(submittedPoint || '');
-  }, [submittedPoint]);
+  }, []);
 
 const startRecording = async () => {
     try {
