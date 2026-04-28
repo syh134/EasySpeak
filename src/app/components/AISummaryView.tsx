@@ -35,8 +35,8 @@ const defaultSummaryData: SummaryData = {
 
 const defaultSupportData = [
   { label: "Support", value: 50, color: "from-emerald-400 to-teal-500" },
-  { label: "Opposition", value: 30, color: "from-rose-400 to-pink-500" },
-  { label: "Neutral", value: 20, color: "from-violet-400 to-purple-500" },
+  { label: "Opposition", value: 30, color: "from-rose-400 to-red-500" },
+  { label: "Neutral", value: 20, color: "from-gray-400 to-gray-500" },
 ];
 
 const defaultDecisionTree = [
@@ -98,11 +98,11 @@ const AISummaryView: React.FC<AISummaryViewProps> = ({ setView, discussionConten
   return (
     <PageLayout activeTab="ai-summary" setActiveTab={setView}>
       <div className="space-y-5">
-        <div className="backdrop-blur-3xl bg-white/20 rounded-2xl border border-white/30 shadow-xl shadow-black/5 p-5">
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-lg shadow-gray-200/50 p-5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-2.5 h-2.5 rounded-full bg-violet-400 animate-pulse" />
-              <p className="text-xs font-semibold text-gray-500 uppercase tracking-widest">AI Summary</p>
+              <div className="w-2.5 h-2.5 rounded-full bg-blue-400 animate-pulse" />
+              <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest">AI Summary</p>
             </div>
             <div className="flex items-center gap-5 text-sm text-gray-400">
               <span>{summaryData.duration}</span>
@@ -117,8 +117,8 @@ const AISummaryView: React.FC<AISummaryViewProps> = ({ setView, discussionConten
             onClick={() => setActiveTab('summary')}
             className={`px-5 py-2.5 rounded-xl font-medium text-sm transition-all ${
               activeTab === 'summary'
-                ? 'backdrop-blur-xl bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 text-white shadow-lg shadow-fuchsia-500/25'
-                : 'backdrop-blur-xl bg-white/20 text-gray-600 border border-white/30 hover:bg-white/30'
+                ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg shadow-blue-500/25'
+                : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
             }`}
           >
             Content Summary
@@ -127,8 +127,8 @@ const AISummaryView: React.FC<AISummaryViewProps> = ({ setView, discussionConten
             onClick={() => setActiveTab('tree')}
             className={`px-5 py-2.5 rounded-xl font-medium text-sm transition-all ${
               activeTab === 'tree'
-                ? 'backdrop-blur-xl bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 text-white shadow-lg shadow-fuchsia-500/25'
-                : 'backdrop-blur-xl bg-white/20 text-gray-600 border border-white/30 hover:bg-white/30'
+                ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg shadow-blue-500/25'
+                : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
             }`}
           >
             Decision Tree
@@ -138,12 +138,12 @@ const AISummaryView: React.FC<AISummaryViewProps> = ({ setView, discussionConten
         {activeTab === 'summary' ? (
           <div>
             {isLoading ? (
-              <div className="backdrop-blur-3xl bg-white/20 rounded-2xl border border-white/30 shadow-xl shadow-black/5 p-10">
+              <div className="bg-white rounded-2xl border border-gray-100 shadow-lg shadow-gray-200/50 p-10">
                 <div className="flex flex-col items-center justify-center py-12">
                   <div className="w-14 h-14 mb-6 relative">
-                    <div className="absolute inset-0 rounded-full border-4 border-violet-400/20" />
-                    <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-violet-500 border-r-fuchsia-500 animate-spin" />
-                    <div className="absolute inset-3 rounded-full border-3 border-transparent border-t-fuchsia-400 border-l-pink-400 animate-spin" style={{ animationDuration: '1.5s' }} />
+                    <div className="absolute inset-0 rounded-full border-4 border-blue-100" />
+                    <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-blue-500 border-r-indigo-500 animate-spin" />
+                    <div className="absolute inset-3 rounded-full border-3 border-transparent border-t-indigo-400 border-l-blue-400 animate-spin" style={{ animationDuration: '1.5s' }} />
                   </div>
                   <p className="text-base font-semibold text-gray-700 mb-1">AI is thinking...</p>
                   <p className="text-sm text-gray-400">Analyzing discussion content</p>
@@ -151,29 +151,29 @@ const AISummaryView: React.FC<AISummaryViewProps> = ({ setView, discussionConten
               </div>
             ) : (
               <div className="space-y-5">
-                <div className="backdrop-blur-3xl bg-gradient-to-r from-violet-500/90 via-fuchsia-500/90 to-pink-500/90 rounded-2xl border border-white/20 p-6 shadow-xl shadow-fuchsia-500/15">
+                <div className="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl p-6 shadow-lg shadow-blue-500/25">
                   <p className="text-lg font-medium text-white leading-relaxed">{summaryData.topic}</p>
                 </div>
 
-                <div className="backdrop-blur-3xl bg-white/20 rounded-2xl border border-white/30 shadow-xl shadow-black/5 p-6">
+                <div className="bg-white rounded-2xl border border-gray-100 shadow-lg shadow-gray-200/50 p-6">
                   <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">Key Takeaways</p>
                   <div className="space-y-3">
                     {summaryData.keyPoints.map((point, index) => (
                       <div
                         key={index}
-                        className={`flex items-center gap-4 p-4 rounded-xl backdrop-blur-xl border ${
+                        className={`flex items-center gap-4 p-4 rounded-xl border ${
                           point.sentiment === 'pro'
-                            ? 'bg-emerald-500/10 border-emerald-500/20'
+                            ? 'bg-blue-50 border-blue-100'
                             : point.sentiment === 'con'
-                            ? 'bg-rose-500/10 border-rose-500/20'
-                            : 'bg-violet-500/10 border-violet-500/20'
+                            ? 'bg-rose-50 border-rose-100'
+                            : 'bg-gray-50 border-gray-100'
                         }`}
                       >
-                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center backdrop-blur-xl ${
-                          point.sentiment === 'pro' ? 'bg-emerald-500/20' : point.sentiment === 'con' ? 'bg-rose-500/20' : 'bg-violet-500/20'
+                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                          point.sentiment === 'pro' ? 'bg-blue-100' : point.sentiment === 'con' ? 'bg-rose-100' : 'bg-gray-100'
                         }`}>
                           <svg className={`w-5 h-5 ${
-                            point.sentiment === 'pro' ? 'text-emerald-500' : point.sentiment === 'con' ? 'text-rose-500' : 'text-violet-500'
+                            point.sentiment === 'pro' ? 'text-blue-600' : point.sentiment === 'con' ? 'text-rose-600' : 'text-gray-600'
                           }`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             {point.sentiment === 'pro' ? (
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2" />
@@ -193,8 +193,8 @@ const AISummaryView: React.FC<AISummaryViewProps> = ({ setView, discussionConten
                   </div>
                 </div>
 
-                <div className="backdrop-blur-3xl bg-white/20 rounded-2xl border border-white/30 p-5">
-                  <p className="text-xs font-semibold text-violet-500 uppercase tracking-widest mb-2">Group Consensus</p>
+                <div className="bg-white rounded-2xl border border-gray-100 p-5">
+                  <p className="text-xs font-semibold text-blue-600 uppercase tracking-widest mb-2">Group Consensus</p>
                   <p className="text-gray-600">{summaryData.consensus}</p>
                 </div>
               </div>
