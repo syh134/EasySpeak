@@ -22,7 +22,7 @@ const SpeakingStageView: React.FC<SpeakingStageViewProps> = ({ setView, submitte
 
   useEffect(() => {
     setSelectedPrompt('');
-    setViewpoint(submittedPoint);
+    setViewpoint(submittedPoint || '');
   }, [submittedPoint]);
 
 const startRecording = async () => {
