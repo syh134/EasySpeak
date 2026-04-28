@@ -241,8 +241,12 @@ const AISummaryView: React.FC<AISummaryViewProps> = ({ setView, discussionConten
                         </div>
 
                         {idx < viewpointVotes.length - 1 && (
-<div className="w-px h-8 bg-blue-200 mt-2" />
+                          <div className="w-px h-8 bg-blue-200 mt-2" />
+                        )}
+                      </div>
+                    ))}
 
+                    <div className="w-px h-8 bg-blue-200 mb-2" />
                     <div className="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl p-4 mt-2">
                       <p className="text-white font-medium text-sm text-center">{summaryData.consensus}</p>
                     </div>
