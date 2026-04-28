@@ -132,11 +132,11 @@ const startRecording = async () => {
   };
 
   const prompts = [
-    { icon: 'bulb', title: "I believe that...", desc: "State your position", gradient: 'from-amber-400 to-orange-500' },
-    { icon: 'plus', title: "Building on...", desc: "Expand arguments", gradient: 'from-blue-400 to-indigo-500' },
-    { icon: 'x', title: "I disagree because...", desc: "Challenge with evidence", gradient: 'from-rose-400 to-pink-500' },
-    { icon: 'book', title: "Looking at data...", desc: "Present facts", gradient: 'from-emerald-400 to-teal-500' },
-    { icon: 'question', title: "Can we clarify...", desc: "Ensure understanding", gradient: 'from-violet-400 to-purple-500' },
+    { icon: 'bulb', title: "I believe that...", desc: "State your position", gradient: 'from-blue-400 to-indigo-500' },
+    { icon: 'plus', title: "Building on...", desc: "Expand arguments", gradient: 'from-blue-500 to-indigo-600' },
+    { icon: 'x', title: "I disagree because...", desc: "Challenge with evidence", gradient: 'from-blue-600 to-purple-600' },
+    { icon: 'book', title: "Looking at data...", desc: "Present facts", gradient: 'from-blue-400 to-teal-500' },
+    { icon: 'question', title: "Can we clarify...", desc: "Ensure understanding", gradient: 'from-blue-500 to-purple-500' },
     { icon: 'link', title: "To summarize...", desc: "Connect points", gradient: 'from-cyan-400 to-blue-500' }
   ];
 
@@ -152,9 +152,9 @@ const startRecording = async () => {
   return (
     <PageLayout activeTab="speakingStage" setActiveTab={setView}>
       <div className="space-y-6">
-        <div className="backdrop-blur-3xl bg-white/20 rounded-2xl border border-white/30 shadow-xl shadow-black/5 p-6">
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-lg shadow-gray-200/50 p-6">
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-500 p-0.5">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 p-0.5">
               <div className="w-full h-full rounded-2xl bg-white flex items-center justify-center">
                 <span className="text-lg font-bold text-gray-900">{studentName?.charAt(0) || 'S'}</span>
               </div>
@@ -162,8 +162,8 @@ const startRecording = async () => {
             <div>
               <h1 className="text-xl font-bold text-gray-900">{studentName || 'Speaker'}</h1>
               <div className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                <span className="text-fuchsia-500 font-medium text-xs">Now Speaking</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
+                <span className="text-blue-600 font-medium text-xs">Now Speaking</span>
               </div>
             </div>
           </div>
@@ -274,7 +274,7 @@ const startRecording = async () => {
               }
             }}
             disabled={!viewpoint.trim()}
-            className="w-full backdrop-blur-xl bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 text-white py-4 rounded-2xl font-semibold text-sm shadow-xl shadow-fuchsia-500/25 hover:shadow-2xl hover:shadow-fuchsia-500/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-4 rounded-2xl font-semibold text-sm shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Submit
           </button>
