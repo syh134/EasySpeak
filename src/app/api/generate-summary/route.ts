@@ -20,19 +20,23 @@ export async function POST(req: NextRequest) {
       decisionTree: [{question: '问题', children: [{answer: '同意', next: '结论', support: 50}]}]
     });
 
-    const response = await fetch('https://ark.cn-beijing.volces.com/api/v3/chat/completions', {
+const response = await fetch('https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation', {
       method: 'POST',
-headers: {
+      headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + process.env.ARK_API_KEY,
       },
       body: JSON.stringify({
-        model: 'ep-20260428153700-ld7vb',
-        messages: [
-          { role: 'user', content: prompt }
-        ],
-        temperature: 0.5,
-        max_tokens: 1000,
+        model: 'qwen-turbo',
+        input: {
+          messages: [
+            { role: 'user', content: prompt }
+          ]
+        },
+        parameters: {
+          temperature: 0.5,
+          max_tokens: 1000,
+        }
       }),
     });
 
@@ -44,7 +48,7 @@ headers: {
 
     const data = await response.json();
     console.log('ARK response:', data);
-    let generatedContent = data.choices?.[0]?.message?.content || '';
+    let generatedContent = data.output?.text || data.output?.choices?.[0]?.message?.content || '';
 
     generatedContent = generatedContent
       .replace(/```json/g, '')

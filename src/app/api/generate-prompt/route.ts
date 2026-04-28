@@ -15,19 +15,23 @@ Requirements:
 
 Response:`;
 
-    const response = await fetch('https://ark.cn-beijing.volces.com/api/v3/chat/completions', {
+const response = await fetch('https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + process.env.ARK_API_KEY,
       },
       body: JSON.stringify({
-        model: 'ep-20260428153700-ld7vb',
-        messages: [
-          { role: 'user', content: prompt }
-        ],
-        temperature: 0.5,
-        max_tokens: 100,
+        model: 'qwen-turbo',
+        input: {
+          messages: [
+            { role: 'user', content: prompt }
+          ]
+        },
+        parameters: {
+          temperature: 0.7,
+          max_tokens: 150,
+        }
       }),
     });
 
@@ -37,7 +41,7 @@ Response:`;
     }
 
     const data = await response.json();
-    const generatedPrompt = data.choices?.[0]?.message?.content || '';
+    const generatedPrompt = data.output?.text || data.output?.choices?.[0]?.message?.content || '';
 
     return NextResponse.json({ prompt: generatedPrompt });
   } catch (error) {
