@@ -27,24 +27,24 @@ const PageLayout: React.FC<PageLayoutProps> = ({ activeTab, setActiveTab, childr
   };
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-gray-50">
       <aside className="w-64 shrink-0 h-screen sticky top-0 p-4">
-        <div className="h-full backdrop-blur-3xl bg-white/10 rounded-3xl border border-white/20 shadow-2xl shadow-black/5 flex flex-col">
-          <div className="p-6">
+        <div className="h-full bg-white rounded-3xl border border-gray-100 shadow-lg shadow-gray-200/50 flex flex-col">
+          <div className="p-6 border-b border-gray-100">
             <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-violet-500 via-fuchsia-500 to-pink-500 flex items-center justify-center shadow-lg shadow-fuchsia-500/25">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/25">
                 <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                 </svg>
               </div>
               <div>
                 <h1 className="text-gray-900 font-bold text-lg">SpeakEasy</h1>
-                <p className="text-gray-500 text-xs">Discussion Platform</p>
+                <p className="text-gray-400 text-xs">Discussion Platform</p>
               </div>
             </div>
           </div>
 
-          <nav className="flex-1 px-4 space-y-2">
+          <nav className="flex-1 px-4 py-6 space-y-2">
             <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest px-3 mb-4">Navigation</p>
 
             {navItems.map((item) => (
@@ -53,11 +53,11 @@ const PageLayout: React.FC<PageLayoutProps> = ({ activeTab, setActiveTab, childr
                 onClick={() => handleSetActiveTab(item.id as ViewType)}
                 className={`group relative flex items-center gap-3 px-4 py-3.5 rounded-2xl cursor-pointer transition-all duration-300 ${
                   activeTab === item.id
-                    ? 'bg-gradient-to-r from-violet-500 to-fuchsia-500 shadow-lg shadow-fuchsia-500/20'
-                    : 'hover:bg-white/60'
+                    ? 'bg-gradient-to-r from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/20'
+                    : 'bg-gray-50 hover:bg-white hover:shadow-md border border-gray-100'
                 }`}
               >
-                <div className={`p-2 rounded-xl transition-all ${activeTab === item.id ? 'bg-white/20' : 'bg-gray-100/50 group-hover:bg-white'}`}>
+                <div className={`p-2 rounded-xl transition-all ${activeTab === item.id ? 'bg-white/20' : 'bg-gray-100'}`}>
                   <svg className={`w-5 h-5 transition-colors ${activeTab === item.id ? 'text-white' : 'text-gray-500'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     {icons[item.icon]}
                   </svg>
@@ -69,10 +69,10 @@ const PageLayout: React.FC<PageLayoutProps> = ({ activeTab, setActiveTab, childr
             ))}
           </nav>
 
-          <div className="p-4">
+          <div className="p-4 border-t border-gray-100">
             <button
               onClick={() => handleSetActiveTab('initial')}
-              className="w-full bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white py-4 rounded-2xl font-semibold text-sm shadow-lg shadow-fuchsia-500/25 hover:shadow-xl hover:shadow-fuchsia-500/30 transition-all"
+              className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-3.5 rounded-2xl font-semibold text-sm shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/30 transition-all"
             >
               + New Topic
             </button>

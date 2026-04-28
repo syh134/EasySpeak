@@ -11,15 +11,15 @@ interface GroupFoundViewProps {
 
 const GroupFoundView: React.FC<GroupFoundViewProps> = ({ setView, studentName = 'Speaker', onSimulateMultiUser }) => (
   <PageLayout activeTab="initial" setActiveTab={setView}>
-    <div className="min-h-screen relative">
-      <div className="absolute top-0 right-0 w-[40%] h-[40%] bg-gradient-to-bl from-violet-400/30 via-fuchsia-400/20 to-pink-400/30 rounded-full blur-[120px]" />
+    <div className="min-h-screen bg-gray-50 relative">
+      <div className="absolute top-0 right-0 w-[40%] h-[40%] bg-gradient-to-bl from-blue-400/20 via-indigo-400/20 to-purple-400/20 rounded-full blur-[120px]" />
 
       <div className="relative flex items-center justify-center min-h-[80vh]">
         <div className="w-full max-w-md">
-          <div className="backdrop-blur-3xl bg-white/20 rounded-[32px] border border-white/30 shadow-2xl shadow-black/10 p-10">
-            <div className="inline-flex items-center gap-2 backdrop-blur-xl bg-emerald-500/20 border border-emerald-500/30 px-4 py-2 rounded-full mb-8">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="text-emerald-600 text-xs font-semibold uppercase tracking-widest">Group Ready</span>
+          <div className="bg-white rounded-[32px] border border-gray-100 shadow-xl shadow-gray-200/50 p-10">
+            <div className="inline-flex items-center gap-2 bg-blue-50 border border-blue-100 px-4 py-2 rounded-full mb-8">
+              <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+              <span className="text-blue-600 text-xs font-semibold uppercase tracking-widest">Group Ready</span>
             </div>
 
             <div className="mb-8">
@@ -27,7 +27,7 @@ const GroupFoundView: React.FC<GroupFoundViewProps> = ({ setView, studentName = 
               <h2 className="text-4xl font-bold text-gray-900">Room 102</h2>
             </div>
 
-            <div className="backdrop-blur-xl bg-white/40 rounded-2xl p-6 border border-white/30 mb-8">
+            <div className="bg-gray-50 rounded-2xl p-6 border border-gray-100 mb-8">
               <p className="text-gray-700 font-medium leading-relaxed">
                 Should AI tools be encouraged in language learning classrooms?
               </p>
@@ -35,7 +35,7 @@ const GroupFoundView: React.FC<GroupFoundViewProps> = ({ setView, studentName = 
 
             <button
               onClick={() => setView('listener')}
-              className="w-full backdrop-blur-xl bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 text-white py-4 rounded-2xl font-semibold text-sm shadow-xl shadow-fuchsia-500/25 hover:shadow-2xl hover:shadow-fuchsia-500/30 transition-all flex items-center justify-center gap-2"
+              className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-4 rounded-2xl font-semibold text-sm shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/30 transition-all flex items-center justify-center gap-2"
             >
               Enter Discussion Room
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -51,7 +51,7 @@ const GroupFoundView: React.FC<GroupFoundViewProps> = ({ setView, studentName = 
                   setView('listener');
                 }
               }}
-              className="w-full mt-3 backdrop-blur-xl bg-emerald-500/20 text-emerald-600 border border-emerald-500/30 py-3 rounded-xl font-medium text-sm hover:bg-emerald-500/30 transition-all"
+              className="w-full mt-3 bg-blue-50 text-blue-600 border border-blue-100 py-3 rounded-xl font-medium text-sm hover:bg-blue-100 transition-all"
             >
               Simulate Multi-User Discussion
             </button>
