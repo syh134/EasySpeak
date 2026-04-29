@@ -24,6 +24,7 @@ export default function SpeakeasySystem() {
   };
 
   const handleSubmitDraft = (point: string) => {
+    console.log('handleSubmitDraft called with:', point);
     setSubmittedPoint(point);
     setPointForAIPrompt(point);
     setDiscussionContent(point);

@@ -55,7 +55,10 @@ const AISummaryView: React.FC<AISummaryViewProps> = ({ setView, discussionConten
   const [summaryData, setSummaryData] = useState<SummaryData>(defaultSummaryData);
 
   useEffect(() => {
-    console.log('AISummary received:', { discussionContent, previousViewpoints });
+    console.log('=== AISummaryView ===');
+    console.log('discussionContent:', discussionContent);
+    console.log('previousViewpoints:', previousViewpoints);
+    console.log('viewpointVotes:', viewpointVotes);
     
     if (!discussionContent && previousViewpoints.length === 0) {
       console.log('No content, returning');

@@ -126,6 +126,13 @@ const ListenerView: React.FC<ListenerViewProps> = ({ setView, submittedPoint = '
             </svg>
             Request to Speak
           </button>
+
+          <button
+            onClick={() => setView('ai-summary')}
+            className="w-full mt-3 bg-white text-gray-600 border border-gray-200 py-3 rounded-xl font-medium text-sm hover:bg-gray-50 transition-all"
+          >
+            End Discussion
+          </button>
         </div>
       </div>
     </PageLayout>

@@ -4,11 +4,23 @@ export async function POST(req: NextRequest) {
   try {
     const { discussionContent, previousViewpoints } = await req.json();
 
-    const allPoints = previousViewpoints.length > 0 ? previousViewpoints : [discussionContent];
+    console.log('=== API /generate-summary ===');
+    console.log('discussionContent:', discussionContent);
+    console.log('previousViewpoints:', previousViewpoints);
+    console.log('previousViewpoints.length:', previousViewpoints?.length);
+
+    const allPoints = previousViewpoints?.length > 0 ? previousViewpoints : [discussionContent];
+    console.log('allPoints:', allPoints);
     
-    const participantCount = previousViewpoints.length || 1;
+    const participantCount = previousViewpoints?.length || 1;
     const pointsText = allPoints.map((p: string, i: number) => (i+1) + '. ' + p).join('\n');
-    
+    console.log('pointsText:', pointsText);
+
+    if (!process.env.ARK_API_KEY) {
+      console.error('Missing ARK_API_KEY env variable');
+      return NextResponse.json({ error: 'Server configuration error' }, { status: 500 });
+    }
+
     const prompt = 'You must respond in ENGLISH only. Analyze this discussion and create a JSON summary. Output ONLY valid JSON, no other text. JSON format:' + JSON.stringify({
       topic: 'Main topic discussed',
       keyPoints: [{sentiment: 'pro', text: 'Support point from discussion', votes: 1}],
