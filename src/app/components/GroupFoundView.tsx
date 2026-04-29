@@ -34,7 +34,13 @@ const GroupFoundView: React.FC<GroupFoundViewProps> = ({ setView, studentName = 
             </div>
 
             <button
-              onClick={() => setView('listener')}
+              onClick={() => {
+                if (onSimulateMultiUser) {
+                  onSimulateMultiUser();
+                } else {
+                  setView('listener');
+                }
+              }}
               className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-4 rounded-2xl font-semibold text-sm shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/30 transition-all flex items-center justify-center gap-2"
             >
               Enter Discussion Room
