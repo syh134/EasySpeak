@@ -63,52 +63,35 @@ const response = await fetch('https://dashscope.aliyuncs.com/api/v1/services/aig
     console.log('ARK response:', data);
     let generatedContent = data.output?.text || data.output?.choices?.[0]?.message?.content || '';
 
-    generatedContent = generatedContent
+    let jsonStr = generatedContent;
+    const jsonMatch = jsonStr.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+      jsonStr = jsonMatch[0];
+    }
+
+    jsonStr = jsonStr
       .replace(/```json/g, '')
       .replace(/```/g, '')
-      .replace(/^[\s\n]*?\{/, '{')
-      .replace(/\}[\s\n]*$/, '}');
+      .trim();
 
-    let summary;
+let summary;
     try {
-      summary = JSON.parse(generatedContent);
-    } catch {
-      const jsonMatch = generatedContent.match(/\{[\s\S]*\}/);
-      if (jsonMatch) {
-        try {
-          summary = JSON.parse(jsonMatch[0]);
-        } catch {
-          summary = {
-            topic: 'AI in Education Discussion',
-            keyPoints: [
-              {sentiment: 'pro', text: 'AI tools help students learn faster', votes: 3}, 
-              {sentiment: 'con', text: 'Students rely too much on AI', votes: 2},
-              {sentiment: 'pro', text: 'AI improves engagement', votes: 2}
-            ],
-            consensus: 'Balance use of AI as a learning supplement',
-            duration: '05:00',
-            participants: participantCount,
-            views: participantCount,
-            supportData: [{label: 'Support', value: 60}, {label: 'Oppose', value: 25}, {label: 'Neutral', value: 15}],
-            decisionTree: [{question: 'Should AI be encouraged in education?', children: [{answer: 'Yes', next: 'Balanced use', support: 60}]}]
-          };
-        }
-} else {
-         summary = {
-           topic: 'AI in Education Discussion',
-           keyPoints: [
-             {sentiment: 'pro', text: 'AI tools help students learn faster', votes: 3}, 
-             {sentiment: 'con', text: 'Students rely too much on AI', votes: 2},
-             {sentiment: 'pro', text: 'AI improves engagement', votes: 2}
-           ],
-           consensus: 'Balance use of AI as a learning supplement',
-           duration: '05:00',
-           participants: participantCount,
-           views: participantCount,
-           supportData: [{label: 'Support', value: 60}, {label: 'Oppose', value: 25}, {label: 'Neutral', value: 15}],
-           decisionTree: [{question: 'Should AI be encouraged in education?', children: [{answer: 'Yes', next: 'Balanced use', support: 60}]}]
-         };
-       }
+      summary = JSON.parse(jsonStr);
+    } catch (e) {
+      console.error('JSON parse error:', e, 'Content:', jsonStr.substring(0, 300));
+      summary = {
+        topic: 'AI in Education Discussion',
+        keyPoints: [
+          {sentiment: 'pro', text: 'AI tools help students learn faster', votes: 3}, 
+          {sentiment: 'con', text: 'Students rely too much on AI', votes: 2}
+        ],
+        consensus: 'Balance use of AI as a learning supplement',
+        duration: '05:00',
+        participants: participantCount,
+        views: participantCount,
+        supportData: [{label: 'Support', value: 60}, {label: 'Oppose', value: 25}, {label: 'Neutral', value: 15}],
+        decisionTree: [{question: 'Should AI be encouraged?', children: [{answer: 'Yes', next: 'Balanced use', support: 60}]}]
+      };
     }
 
     return NextResponse.json({ summary });
