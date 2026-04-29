@@ -6,20 +6,32 @@ import { ViewType, Votes } from './types';
 interface ListenerViewProps {
   setView: (val: ViewType) => void;
   submittedPoint?: string;
+  previousViewpoints?: string[];
 }
 
-const ListenerView: React.FC<ListenerViewProps> = ({ setView, submittedPoint = '' }) => {
+const ListenerView: React.FC<ListenerViewProps> = ({ setView, submittedPoint = '', previousViewpoints = [] }) => {
   const [votes, setVotes] = useState<Votes>({ agree: 72, disagree: 28 });
   const [userVoted, setUserVoted] = useState<boolean>(false);
 
   const total = votes.agree + votes.disagree;
   const agreePercent = Math.round((votes.agree / total) * 100);
 
-  const previousViewpoints = [
-    { speaker: "Sarah Jenkins", quote: "The shift toward free verse wasn't just a stylistic choice, but a fundamental reconceptualization of what poetry could be.", time: "2:34", avatar: "S" },
-    { speaker: "Michael Chen", quote: "I think the data actually shows that structured verse helped students understand rhythm better initially.", time: "2:15", avatar: "M" },
-    { speaker: "Emma Rodriguez", quote: "But what about cultural context? Free verse allows for more authentic expression of diverse voices.", time: "1:58", avatar: "E" },
-  ];
+  const avatars = ['S', 'M', 'E', 'J', 'A', 'K'];
+  const getAvatar = (index: number) => avatars[index % avatars.length];
+  const getTime = () => {
+    const min = Math.floor(Math.random() * 5);
+    const sec = Math.floor(Math.random() * 60);
+    return `${min}:${sec.toString().padStart(2, '0')}`;
+  };
+
+  const displayedPoints = previousViewpoints.length > 0 
+    ? previousViewpoints.map((p, i) => ({
+        speaker: `Speaker ${i + 1}`,
+        quote: p,
+        time: getTime(),
+        avatar: getAvatar(i)
+      }))
+    : [];
 
   return (
     <PageLayout activeTab="listener" setActiveTab={setView}>
@@ -52,7 +64,7 @@ const ListenerView: React.FC<ListenerViewProps> = ({ setView, submittedPoint = '
         <div>
           <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">Previous Perspectives</p>
           <div className="space-y-3">
-            {previousViewpoints.map((point, index) => (
+            {displayedPoints.map((point, index) => (
               <div
                 key={index}
                 className="bg-white rounded-xl border border-gray-100 p-4 hover:shadow-md transition-all"

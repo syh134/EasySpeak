@@ -87,7 +87,7 @@ export default function SpeakeasySystem() {
     case 'groupFound':
       return <GroupFoundView setView={setView} studentName={studentName} onSimulateMultiUser={simulateMultiUser} />;
     case 'listener':
-      return <ListenerView setView={setView} submittedPoint={submittedPoint} />;
+      return <ListenerView setView={setView} submittedPoint={submittedPoint} previousViewpoints={previousViewpoints} />;
     case 'queued':
       return <QueuedView setView={setView} submittedPoint={submittedPoint} />;
     case 'turnNotification':
