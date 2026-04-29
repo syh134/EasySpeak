@@ -66,8 +66,8 @@ const response = await fetch('https://dashscope.aliyuncs.com/api/v1/services/aig
     generatedContent = generatedContent
       .replace(/```json/g, '')
       .replace(/```/g, '')
-      .replace(/^[\s\S]*?\{/, '{')
-      .replace(/\}[\s\S]*$/, '}');
+      .replace(/^[\s\n]*?\{/, '{')
+      .replace(/\}[\s\n]*$/, '}');
 
     let summary;
     try {
