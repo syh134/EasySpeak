@@ -7,18 +7,18 @@ export async function POST(req: NextRequest) {
     const allPoints = previousViewpoints.length > 0 ? previousViewpoints : [discussionContent];
     
     const participantCount = previousViewpoints.length || 1;
-    const pointsText = previousViewpoints.map((p: string, i: number) => (i+1) + '. ' + p).join('\n');
+    const pointsText = allPoints.map((p: string, i: number) => (i+1) + '. ' + p).join('\n');
     
-    const prompt = 'You must respond in English. Analyze this discussion and create a JSON summary. Output ONLY valid JSON, no other text. JSON format:' + JSON.stringify({
-      topic: 'Main topic',
-      keyPoints: [{sentiment: 'pro', text: 'Support point', votes: 1}],
-      consensus: 'Group consensus',
+    const prompt = 'You must respond in ENGLISH only. Analyze this discussion and create a JSON summary. Output ONLY valid JSON, no other text. JSON format:' + JSON.stringify({
+      topic: 'Main topic discussed',
+      keyPoints: [{sentiment: 'pro', text: 'Support point from discussion', votes: 1}],
+      consensus: 'Group consensus summary',
       duration: '05:00',
       participants: participantCount,
       views: participantCount,
-      supportData: [{label: 'Support', value: 50}],
-      decisionTree: [{question: 'Key question', children: [{answer: 'Agree', next: 'Conclusion', support: 50}]}]
-    }) + '\n\nDiscussion points:\n' + pointsText + '\n\nRespond in English only:';
+      supportData: [{label: 'Support', value: 50}, {label: 'Oppose', value: 30}, {label: 'Neutral', value: 20}],
+      decisionTree: [{question: 'Key question from discussion', children: [{answer: 'Agreement', next: 'Next step', support: 50}]}]
+    }) + '\n\nDiscussion points:\n' + pointsText + '\n\nRespond in English only. Use English for all fields.:';
 
 
 const response = await fetch('https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation', {
@@ -67,28 +67,36 @@ const response = await fetch('https://dashscope.aliyuncs.com/api/v1/services/aig
           summary = JSON.parse(jsonMatch[0]);
         } catch {
           summary = {
-            topic: '讨论主题',
-            keyPoints: [{sentiment: 'pro', text: 'AI有助于学习', votes: 3}, {sentiment: 'con', text: '学生过度依赖', votes: 2}],
-            consensus: '需要平衡使用',
+            topic: 'AI in Education Discussion',
+            keyPoints: [
+              {sentiment: 'pro', text: 'AI tools help students learn faster', votes: 3}, 
+              {sentiment: 'con', text: 'Students rely too much on AI', votes: 2},
+              {sentiment: 'pro', text: 'AI improves engagement', votes: 2}
+            ],
+            consensus: 'Balance use of AI as a learning supplement',
             duration: '05:00',
             participants: participantCount,
             views: participantCount,
-            supportData: [{label: '支持', value: 60}, {label: '反对', value: 40}],
-            decisionTree: [{question: 'AI应该被鼓励吗', children: [{answer: '同意', next: '平衡使用', support: 60}]}]
+            supportData: [{label: 'Support', value: 60}, {label: 'Oppose', value: 25}, {label: 'Neutral', value: 15}],
+            decisionTree: [{question: 'Should AI be encouraged in education?', children: [{answer: 'Yes', next: 'Balanced use', support: 60}]}]
           };
         }
-      } else {
-        summary = {
-          topic: '讨论主题',
-          keyPoints: [{sentiment: 'pro', text: 'AI有助于学习', votes: 3}, {sentiment: 'con', text: '学生过度依赖', votes: 2}],
-          consensus: '需要平衡使用',
-          duration: '05:00',
-          participants: participantCount,
-          views: participantCount,
-          supportData: [{label: '支持', value: 60}, {label: '反对', value: 40}],
-          decisionTree: [{question: 'AI应该被鼓励吗', children: [{answer: '同意', next: '平衡使用', support: 60}]}]
-        };
-      }
+} else {
+         summary = {
+           topic: 'AI in Education Discussion',
+           keyPoints: [
+             {sentiment: 'pro', text: 'AI tools help students learn faster', votes: 3}, 
+             {sentiment: 'con', text: 'Students rely too much on AI', votes: 2},
+             {sentiment: 'pro', text: 'AI improves engagement', votes: 2}
+           ],
+           consensus: 'Balance use of AI as a learning supplement',
+           duration: '05:00',
+           participants: participantCount,
+           views: participantCount,
+           supportData: [{label: 'Support', value: 60}, {label: 'Oppose', value: 25}, {label: 'Neutral', value: 15}],
+           decisionTree: [{question: 'Should AI be encouraged in education?', children: [{answer: 'Yes', next: 'Balanced use', support: 60}]}]
+         };
+       }
     }
 
     return NextResponse.json({ summary });
