@@ -20,6 +20,11 @@ export default function SpeakeasySystem() {
 
   const handleJoinRoom = (name: string) => {
     setStudentName(name);
+    setDiscussionContent('');
+    setPreviousViewpoints([]);
+    setSubmittedPoint('');
+    setPointForAIPrompt('');
+    setViewpointVotes([]);
     setView('groupFound');
   };
 
