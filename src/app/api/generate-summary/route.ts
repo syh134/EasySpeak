@@ -59,14 +59,16 @@ const response = await fetch('https://dashscope.aliyuncs.com/api/v1/services/aig
       return NextResponse.json({ error }, { status: 500 });
     }
 
-    const data = await response.json();
+const data = await response.json();
     console.log('ARK response:', data);
-    let generatedContent = data.output?.text || data.output?.choices?.[0]?.message?.content || '';
+    let rawText = data.output?.text || data.output?.choices?.[0]?.message?.content || '';
+    console.log('Raw text length:', rawText.length, 'Raw text preview:', rawText.substring(0, 500));
 
-    let jsonStr = generatedContent;
-    const jsonMatch = jsonStr.match(/\{[\s\S]*\}/);
+    let jsonStr = rawText;
+    let jsonMatch = jsonStr.match(/\{[\s\S]*\}/);
     if (jsonMatch) {
       jsonStr = jsonMatch[0];
+      console.log('Extracted JSON length:', jsonStr.length);
     }
 
     jsonStr = jsonStr
@@ -74,9 +76,10 @@ const response = await fetch('https://dashscope.aliyuncs.com/api/v1/services/aig
       .replace(/```/g, '')
       .trim();
 
-let summary;
+    let summary;
     try {
       summary = JSON.parse(jsonStr);
+      console.log('JSON parsed successfully');
     } catch (e) {
       console.error('JSON parse error:', e, 'Content:', jsonStr.substring(0, 300));
       summary = {
