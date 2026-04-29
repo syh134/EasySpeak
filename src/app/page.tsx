@@ -56,26 +56,9 @@ export default function SpeakeasySystem() {
   };
 
   const simulateMultiUser = async () => {
-    const topics = [
-      { text: 'AI tools should be encouraged because they help students learn faster', agree: 3, disagree: 1 },
-      { text: 'Students rely too much on AI and do not develop skills', agree: 1, disagree: 3 },
-      { text: 'It depends on how we use AI as a supplement', agree: 2, disagree: 0 },
-      { text: 'AI has improved student engagement significantly', agree: 2, disagree: 1 },
-      { text: 'Some students use AI to cheat rather than learn', agree: 0, disagree: 2 },
-    ];
-    
-    const shuffled = topics.sort(() => Math.random() - 0.5);
-    const selectedPoints = shuffled.slice(0, 3 + Math.floor(Math.random() * 3));
-    
     setPreviousViewpoints([]);
     setViewpointVotes([]);
     setDiscussionContent('');
-    for (const p of selectedPoints) {
-      await new Promise(r => setTimeout(r, 100));
-      setPreviousViewpoints(prev => [...prev, p.text]);
-      setViewpointVotes(prev => [...prev, { point: p.text, agree: p.agree, disagree: p.disagree }]);
-      setDiscussionContent(p.text);
-    }
     setView('listener');
   };
 
