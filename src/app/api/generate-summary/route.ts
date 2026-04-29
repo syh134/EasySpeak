@@ -9,16 +9,16 @@ export async function POST(req: NextRequest) {
     const participantCount = previousViewpoints.length || 1;
     const pointsText = previousViewpoints.map((p: string, i: number) => (i+1) + '. ' + p).join('\n');
     
-    const prompt = '分析讨论:' + pointsText + ' 输出JSON:' + JSON.stringify({
-      topic: '主题',
-      keyPoints: [{sentiment: 'pro', text: '支持', votes: 1}],
-      consensus: '共识',
+    const prompt = 'Analyze this discussion. Output JSON:' + JSON.stringify({
+      topic: 'Topic',
+      keyPoints: [{sentiment: 'pro', text: 'Support point', votes: 1}],
+      consensus: 'Consensus',
       duration: '05:00',
       participants: participantCount,
       views: participantCount,
-      supportData: [{label: '支持', value: 50}],
-      decisionTree: [{question: '问题', children: [{answer: '同意', next: '结论', support: 50}]}]
-    });
+      supportData: [{label: 'Support', value: 50}],
+      decisionTree: [{question: 'Question', children: [{answer: 'Agree', next: 'Conclusion', support: 50}]}]
+    }) + '\n\nDiscussion:\n' + pointsText;
 
 const response = await fetch('https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation', {
       method: 'POST',
