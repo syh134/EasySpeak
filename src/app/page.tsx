@@ -13,6 +13,7 @@ export default function SpeakeasySystem() {
   const [pointForAIPrompt, setPointForAIPrompt] = useState<string>('');
   const [studentName, setStudentName] = useState<string>('');
   const [viewpointVotes, setViewpointVotes] = useState<Array<{point: string, agree: number, disagree: number}>>([]);
+  const [currentUserVote, setCurrentUserVote] = useState<'agree' | 'disagree' | null>(null);
   
   useEffect(() => { setMounted(true); }, []);
 
@@ -34,7 +35,23 @@ export default function SpeakeasySystem() {
     setPointForAIPrompt(point);
     setDiscussionContent(point);
     setPreviousViewpoints(prev => [...prev, point]);
+    setCurrentUserVote(null);
     setView('listener');
+  };
+
+  const handleVote = (vote: 'agree' | 'disagree') => {
+    setCurrentUserVote(vote);
+    if (submittedPoint) {
+      setViewpointVotes(prev => {
+        const existing = prev.findIndex(v => v.point === submittedPoint);
+        if (existing >= 0) {
+          const updated = [...prev];
+          updated[existing] = { ...updated[existing], [vote]: updated[existing][vote] + 1 };
+          return updated;
+        }
+        return [...prev, { point: submittedPoint, agree: vote === 'agree' ? 1 : 0, disagree: vote === 'disagree' ? 1 : 0 }];
+      });
+    }
   };
 
   const handleEnterSpeakingStage = () => {
@@ -47,6 +64,7 @@ export default function SpeakeasySystem() {
     setPreviousViewpoints(prev => [...prev, finalPoint]);
     setDiscussionContent(finalPoint);
     setSubmittedPoint('');
+    setCurrentUserVote(null);
     setView('listener');
   };
 
@@ -70,7 +88,15 @@ export default function SpeakeasySystem() {
     case 'groupFound':
       return <GroupFoundView setView={setView} studentName={studentName} onSimulateMultiUser={simulateMultiUser} />;
     case 'listener':
-      return <ListenerView setView={setView} submittedPoint={submittedPoint} previousViewpoints={previousViewpoints} />;
+      return (
+        <ListenerView 
+          setView={setView} 
+          submittedPoint={submittedPoint} 
+          previousViewpoints={previousViewpoints} 
+          onVote={handleVote}
+          onEndDiscussion={() => setView('ai-summary')}
+        />
+      );
     case 'queued':
       return <QueuedView setView={setView} submittedPoint={submittedPoint} />;
     case 'turnNotification':
@@ -78,7 +104,7 @@ export default function SpeakeasySystem() {
     case 'speakingStage':
       return <SpeakingStageView setView={setView} submittedPoint={submittedPoint} pointForAIPrompt={pointForAIPrompt} studentName={studentName} onSubmitDraft={handleSubmitDraft} onFinishSpeaking={handleFinishSpeaking} />;
     case 'ai-summary':
-      return <AISummaryView setView={setView} discussionContent={discussionContent} previousViewpoints={previousViewpoints} viewpointVotes={viewpointVotes} />;
+      return <AISummaryView setView={setView} discussionContent={discussionContent} previousViewpoints={previousViewpoints} viewpointVotes={viewpointVotes} allViewpoints={previousViewpoints} />;
     default:
       return null;
   }

@@ -8,6 +8,7 @@ interface AISummaryViewProps {
   discussionContent?: string;
   previousViewpoints?: string[];
   viewpointVotes?: Array<{point: string, agree: number, disagree: number}>;
+  allViewpoints?: string[];
 }
 
 interface SummaryData {
@@ -49,7 +50,7 @@ const defaultDecisionTree = [
   },
 ];
 
-const AISummaryView: React.FC<AISummaryViewProps> = ({ setView, discussionContent = '', previousViewpoints = [], viewpointVotes = [] }) => {
+const AISummaryView: React.FC<AISummaryViewProps> = ({ setView, discussionContent = '', previousViewpoints = [], viewpointVotes = [], allViewpoints = [] }) => {
   const [activeTab, setActiveTab] = useState<'summary' | 'tree'>('summary');
   const [isLoading, setIsLoading] = useState(true);
   const [summaryData, setSummaryData] = useState<SummaryData>(defaultSummaryData);
@@ -72,7 +73,7 @@ const AISummaryView: React.FC<AISummaryViewProps> = ({ setView, discussionConten
         const response = await fetch('/api/generate-summary', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ discussionContent, previousViewpoints }),
+          body: JSON.stringify({ discussionContent, previousViewpoints, viewpointVotes }),
         });
 
         const data = await response.json();
@@ -213,7 +214,7 @@ const AISummaryView: React.FC<AISummaryViewProps> = ({ setView, discussionConten
                   <p className="font-semibold text-white text-sm">{summaryData.topic}</p>
                 </div>
 
-                {viewpointVotes && viewpointVotes.length > 0 ? (
+                {((allViewpoints.length > 0 || previousViewpoints.length > 0) && (viewpointVotes && viewpointVotes.length > 0)) ? (
                   <div className="flex flex-col items-center w-full">
                     {viewpointVotes.map((v: {point: string, agree: number, disagree: number}, idx: number) => (
                       <div key={idx} className="flex flex-col items-center">
@@ -223,7 +224,7 @@ const AISummaryView: React.FC<AISummaryViewProps> = ({ setView, discussionConten
                             <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold text-xs">
                               {idx + 1}
                             </div>
-                            <p className="text-xs text-gray-500 font-medium">发言 {idx + 1}</p>
+                            <p className="text-xs text-gray-500 font-medium">Speech {idx + 1}</p>
                           </div>
                           <p className="text-sm text-gray-700 text-center">{v.point}</p>
                         </div>
@@ -232,13 +233,13 @@ const AISummaryView: React.FC<AISummaryViewProps> = ({ setView, discussionConten
                           <div className="flex flex-col items-center">
                             <div className="w-px h-4 bg-emerald-300/50 mb-2" />
                             <div className="rounded-full px-4 py-2 bg-emerald-500/20 border border-emerald-400/30">
-                              <span className="text-emerald-600 text-sm font-medium">👍 同意 ({v.agree})</span>
+                              <span className="text-emerald-600 text-sm font-medium">👍 Agree ({v.agree})</span>
                             </div>
                           </div>
                           <div className="flex flex-col items-center">
                             <div className="w-px h-4 bg-rose-300/50 mb-2" />
                             <div className="rounded-full px-4 py-2 bg-rose-500/20 border border-rose-400/30">
-                              <span className="text-rose-600 text-sm font-medium">👎 不同意 ({v.disagree})</span>
+                              <span className="text-rose-600 text-sm font-medium">👎 Disagree ({v.disagree})</span>
                             </div>
                           </div>
                         </div>
@@ -248,6 +249,50 @@ const AISummaryView: React.FC<AISummaryViewProps> = ({ setView, discussionConten
                         )}
                       </div>
                     ))}
+
+                    <div className="w-px h-8 bg-blue-200 mb-2" />
+                    <div className="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl p-4 mt-2">
+                      <p className="text-white font-medium text-sm text-center">{summaryData.consensus}</p>
+                    </div>
+                  </div>
+                ) : (allViewpoints.length > 0 || previousViewpoints.length > 0) ? (
+                  <div className="flex flex-col items-center w-full">
+                    {(allViewpoints.length > 0 ? allViewpoints : previousViewpoints).map((point: string, idx: number) => {
+                      const votes = viewpointVotes?.find(v => v.point === point);
+                      return (
+                        <div key={idx} className="flex flex-col items-center">
+                          <div className="w-px h-8 bg-blue-200 mb-2" />
+                          <div className="bg-gray-50 rounded-xl p-3 border border-gray-100 mb-2 max-w-md">
+                            <div className="flex items-center gap-2 mb-2">
+                              <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold text-xs">
+                                {idx + 1}
+                              </div>
+                              <p className="text-xs text-gray-500 font-medium">Speech {idx + 1}</p>
+                            </div>
+                            <p className="text-sm text-gray-700 text-center">{point}</p>
+                          </div>
+                          
+                          <div className="flex gap-6">
+                            <div className="flex flex-col items-center">
+                              <div className="w-px h-4 bg-emerald-300/50 mb-2" />
+                              <div className="rounded-full px-4 py-2 bg-emerald-500/20 border border-emerald-400/30">
+                                <span className="text-emerald-600 text-sm font-medium">👍 Agree ({votes?.agree ?? 0})</span>
+                              </div>
+                            </div>
+                            <div className="flex flex-col items-center">
+                              <div className="w-px h-4 bg-rose-300/50 mb-2" />
+                              <div className="rounded-full px-4 py-2 bg-rose-500/20 border border-rose-400/30">
+                                <span className="text-rose-600 text-sm font-medium">👎 Disagree ({votes?.disagree ?? 0})</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          {idx < (allViewpoints.length > 0 ? allViewpoints : previousViewpoints).length - 1 && (
+                            <div className="w-px h-8 bg-blue-200 mt-2" />
+                          )}
+                        </div>
+                      );
+                    })}
 
                     <div className="w-px h-8 bg-blue-200 mb-2" />
                     <div className="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl p-4 mt-2">

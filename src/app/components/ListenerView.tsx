@@ -7,9 +7,11 @@ interface ListenerViewProps {
   setView: (val: ViewType) => void;
   submittedPoint?: string;
   previousViewpoints?: string[];
+  onVote?: (vote: 'agree' | 'disagree') => void;
+  onEndDiscussion?: () => void;
 }
 
-const ListenerView: React.FC<ListenerViewProps> = ({ setView, submittedPoint = '', previousViewpoints = [] }) => {
+const ListenerView: React.FC<ListenerViewProps> = ({ setView, submittedPoint = '', previousViewpoints = [], onVote, onEndDiscussion }) => {
   const [votes, setVotes] = useState<Votes>({ agree: 72, disagree: 28 });
   const [userVoted, setUserVoted] = useState<boolean>(false);
 
@@ -114,13 +116,13 @@ const ListenerView: React.FC<ListenerViewProps> = ({ setView, submittedPoint = '
             ) : (
               <>
                 <button
-                  onClick={() => { setVotes(v => ({ ...v, agree: v.agree + 1 })); setUserVoted(true); }}
+                  onClick={() => { setVotes(v => ({ ...v, agree: v.agree + 1 })); setUserVoted(true); onVote?.('agree'); }}
                   className="flex-1 py-3 rounded-xl font-medium text-sm bg-gray-50 text-gray-700 border border-gray-200 hover:bg-blue-50 hover:border-blue-200 hover:text-blue-600 transition-all"
                 >
                   Agree
                 </button>
                 <button
-                  onClick={() => { setVotes(v => ({ ...v, disagree: v.disagree + 1 })); setUserVoted(true); }}
+                  onClick={() => { setVotes(v => ({ ...v, disagree: v.disagree + 1 })); setUserVoted(true); onVote?.('disagree'); }}
                   className="flex-1 py-3 rounded-xl font-medium text-sm bg-gray-50 text-gray-700 border border-gray-200 hover:bg-rose-50 hover:border-rose-200 hover:text-rose-600 transition-all"
                 >
                   Disagree
@@ -140,7 +142,7 @@ const ListenerView: React.FC<ListenerViewProps> = ({ setView, submittedPoint = '
           </button>
 
           <button
-            onClick={() => setView('ai-summary')}
+            onClick={() => onEndDiscussion?.() || setView('ai-summary')}
             className="w-full mt-3 bg-white text-gray-600 border border-gray-200 py-3 rounded-xl font-medium text-sm hover:bg-gray-50 transition-all"
           >
             End Discussion

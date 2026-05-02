@@ -2,18 +2,26 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
   try {
-    const { discussionContent, previousViewpoints } = await req.json();
+    const { discussionContent, previousViewpoints, viewpointVotes } = await req.json();
 
     console.log('=== API /generate-summary ===');
     console.log('discussionContent:', discussionContent);
     console.log('previousViewpoints:', previousViewpoints);
+    console.log('viewpointVotes:', viewpointVotes);
     console.log('previousViewpoints.length:', previousViewpoints?.length);
 
     const allPoints = previousViewpoints?.length > 0 ? previousViewpoints : [discussionContent];
     console.log('allPoints:', allPoints);
     
     const participantCount = previousViewpoints?.length || 1;
-    const pointsText = allPoints.map((p: string, i: number) => (i+1) + '. ' + p).join('\n');
+    let pointsText = allPoints.map((p: string, i: number) => (i+1) + '. " ' + p + ' "').join('\n');
+    
+    if (viewpointVotes && viewpointVotes.length > 0) {
+      const votesText = viewpointVotes.map((v: {point: string, agree: number, disagree: number}, i: number) => 
+        `Point ${i+1}: "${v.point}" - Agree: ${v.agree}, Disagree: ${v.disagree}`
+      ).join('\n');
+      pointsText += '\n\nUser vote data:\n' + votesText;
+    }
     console.log('pointsText:', pointsText);
 
     if (!process.env.ARK_API_KEY) {
@@ -22,15 +30,15 @@ export async function POST(req: NextRequest) {
     }
 
     const prompt = 'You must respond in ENGLISH only. Analyze this discussion and create a JSON summary. Output ONLY valid JSON, no other text. JSON format:' + JSON.stringify({
-      topic: 'Main topic discussed',
-      keyPoints: [{sentiment: 'pro', text: 'Support point from discussion', votes: 1}],
+      topic: 'Discussion topic',
+      keyPoints: [{sentiment: 'pro', text: 'Supporting point from discussion', votes: 1}],
       consensus: 'Group consensus summary',
       duration: '05:00',
       participants: participantCount,
       views: participantCount,
       supportData: [{label: 'Support', value: 50}, {label: 'Oppose', value: 30}, {label: 'Neutral', value: 20}],
-      decisionTree: [{question: 'Key question from discussion', children: [{answer: 'Agreement', next: 'Next step', support: 50}]}]
-    }) + '\n\nDiscussion points:\n' + pointsText + '\n\nRespond in English only. Use English for all fields.:';
+      decisionTree: [{question: 'Key question from discussion', children: [{answer: 'Yes', next: 'Next step', support: 50}]}]
+    }) + '\n\nDiscussion points:\n' + pointsText + '\n\nUser vote data (if available):\n' + (viewpointVotes ? JSON.stringify(viewpointVotes) : 'No votes') + '\n\nRespond in ENGLISH only. Use English for all fields.:';
 
 
 const response = await fetch('https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation', {
