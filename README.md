@@ -1,36 +1,86 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SpeakEasy
 
-## Getting Started
+英语口语练习与讨论系统
 
-First, run the development server:
+## 技术栈
+
+- **前端框架**: Next.js 16.2.4 (App Router)
+- **UI库**: React 19.2.4
+- **语言**: TypeScript
+- **样式**: Tailwind CSS 4 + CSS
+- **图标**: Lucide React
+- **AI API**: 阿里云通义千问 (DashScope / ARK)
+
+## 功能特性
+
+- 多人在线讨论房间
+- 实时语音识别输入 (Web Speech API)
+- 轮转发言机制
+- 观点投票系统 (同意/反对)
+- AI 智能生成讨论摘要
+
+## 项目启动
+
+### 1. 安装依赖
+
+```bash
+npm install
+```
+
+### 2. 配置环境变量
+
+在项目根目录创建 `.env.local` 文件：
+
+```env
+ARK_API_KEY=your_api_key_here
+```
+
+获取 API Key: [阿里云 ARK 控制台](https://dashscope.console.aliyun.com/)
+
+### 3. 启动开发服务器
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 4. 访问应用
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+打开浏览器访问: http://localhost:3000
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 其他命令
 
-## Learn More
+```bash
+# 构建生产版本
+npm run build
 
-To learn more about Next.js, take a look at the following resources:
+# 启动生产服务器
+npm run start
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# 代码检查
+npm run lint
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 项目结构
 
-## Deploy on Vercel
+```
+src/app/
+├── page.tsx              # 主页面 (状态管理)
+├── layout.tsx            # 布局组件
+├── globals.css          # 全局样式
+├── components/          # UI 组件
+│   ├── InitialView.tsx       # 初始页面
+│   ├── GroupFoundView.tsx   # 分组完成
+│   ├── ListenerView.tsx     # 听众视图
+│   ├── QueuedView.tsx       # 排队视图
+│   ├── TurnNotificationView.tsx  # 轮转通知
+│   ├── SpeakingStageView.tsx      # 发言舞台
+│   ├── AISummaryView.tsx          # AI 摘要
+│   └── types.ts            # 类型定义
+└── api/                  # API 路由
+    ├── generate-summary/  # 生成摘要
+    └── generate-prompt/   # 生成提示
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## License
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT
