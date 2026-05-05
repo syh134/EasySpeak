@@ -45,7 +45,8 @@ npm run dev
 
 ### 4. 访问应用
 
-打开浏览器访问: http://localhost:3000
+- 本地开发: http://localhost:3000
+- 在线部署: https://easy-speak-umber.vercel.app
 
 ## 其他命令
 
